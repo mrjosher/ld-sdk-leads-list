@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.4/b-print-1.5.4/fh-3.1.4/r-2.2.2/rg-1.1.0/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/flatly/bootstrap.min.css"/>
+    <script crossorigin="anonymous"  src="https://app.launchdarkly.com/snippet/ldclient.min.js"></script>
+    <title>Lead List for Decemeber</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="row"><div class="col-12"></div><h1>December Lead List</h1></div>
+    
+    <table id="leadlist" class="table table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Company</th>
+                <th>First</th>
+                <th>Last</th>
+                <th>Title</th>
+                <th>Email</th>
+                <th>Market Cap</th>
+                <th>DUNS</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>id</th>
+                <th>Company</th>
+                <th>First</th>
+                <th>Last</th>
+                <th>Title</th>
+                <th>Email</th>
+                <th>Market Cap</th>
+                <th>DUNS</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.4/b-print-1.5.4/fh-3.1.4/r-2.2.2/rg-1.1.0/datatables.min.js"></script>    
+    <script>
+        var user = {"key": "aa0c53242sdfa34531eb", "anonymous": true};
+        var ldclient = LDClient.initialize('5c11b188220ed31718cf2cac', user);
+
+        
+        ldclient.on('ready', function() {
+        var showFeature = ldclient.variation("react-feature", false);
+
+        if (showFeature) {
+                $(document).ready(function () {
+                        $('#leadlist').DataTable({
+                            "ajax": "https://lucrativelabs.com/LD-SDK/DATA/Leads-DEC.json",
+                            "columns": [
+                                {"data": "id"},
+                                {"data": "company"},
+                                {"data": "first_name"},
+                                {"data": "last_name"},
+                                {"data": "job_title"},
+                                {"data": "email"},
+                                {"data": "market_cap"},
+                                {"data": "duns"}
+                            ],
+                            "dom": '<"toolbar">frtip'
+                        });
+                        $("div.toolbar").html('<h3>No grouped rows</h3>');
+                    });
+            } else {
+                $(document).ready(function () {
+                        $('#leadlist').DataTable({
+                            "ajax": "https://lucrativelabs.com/LD-SDK/DATA/Leads-DEC.json",
+                            "rowGroup": {"dataSrc": "company"},
+                            "pageLength": 50,
+                            "columns": [
+                                {"data": "id"},
+                                {"data": "company"},
+                                {"data": "first_name"},
+                                {"data": "last_name"},
+                                {"data": "job_title"},
+                                {"data": "email"},
+                                {"data": "market_cap"},
+                                {"data": "duns"}
+                            ],
+                            "order": [[ 1, "asc" ]],
+                            "dom": '<"toolbar">frtip'
+                        });
+                        $("div.toolbar").html('<h3 style="float:left;">Grouped by company name row, displaying 50 rows</h3>');
+                    });
+            }
+        });
+        ldclient.on('change:react-feature', function(value, previous) {
+            console.log('react-feature changed:', value, '(' + previous + ')');
+        });
+    </script>
+</body>
+</html>
